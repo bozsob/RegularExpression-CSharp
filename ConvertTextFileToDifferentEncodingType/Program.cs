@@ -10,17 +10,19 @@ namespace ConvertTextFileToDifferentEncodingType
 {
     class Program
     {
+        
+
         static void Main(string[] args)
         {
+            StreamReader sr;
+            StreamWriter sw;
             try
             {
-                using (StreamReader sr = new StreamReader(@"C:\boot.ini"))
                 {
-                    StreamWriter sw = new StreamWriter("boot-utf7.txt", false, Encoding.UTF7);
+                    sr = new StreamReader(@"C:\Test\test.txt");
+                    sw = new StreamWriter("test-utf7.txt", false, Encoding.UTF7);
                     sw.WriteLine(sr.ReadToEnd());
-
-                    sw.Close();
-                    sr.Close();
+                    Debug.WriteLine("done");
                 }
             }
 
@@ -28,6 +30,8 @@ namespace ConvertTextFileToDifferentEncodingType
             {
                 throw new Exception("Error occured.", e);                
             }
+            sw.Close();
+            sr.Close();
         }
     }
 }
