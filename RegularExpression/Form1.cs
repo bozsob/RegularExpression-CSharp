@@ -26,6 +26,7 @@ namespace RegularExpression
             string emailPattern = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                  @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
 
+            // validate the Name input
             if (Regex.IsMatch(txtName.Text, namePattern))
             {
                 Debug.WriteLine("Name is valid");
@@ -36,6 +37,7 @@ namespace RegularExpression
                 MessageBox.Show("Not a valid name, use only alphabetical characters.");
             }
 
+            // validate the Phone number (US phone number)
             if (Regex.IsMatch(txtPhone.Text, phonePattern))
             {
                 Debug.WriteLine("Phone is valid");
@@ -46,7 +48,11 @@ namespace RegularExpression
                 MessageBox.Show("Phone number is not a valid US phone number");
             }
 
-            if (Regex.IsMatch(txtEmail.Text, emailPattern))
+            // reformat the phone number to  (###) ###-#### format.
+            txtPhone.Text = ReformatPhoneNumber(txtPhone.Text);
+
+            // validate the Email
+            if (Regex.IsMatch(txtEmail.Text, emailPattern, RegexOptions.IgnoreCase))
             {
                 Debug.WriteLine("Email is valid");
             }
@@ -55,8 +61,20 @@ namespace RegularExpression
                 Debug.WriteLine("Email is NOT valid");
                 MessageBox.Show("This is not a valid email address.");
             }
-
-
         }
+
+
+        static string ReformatPhoneNumber(string input)
+        {
+
+            string pattern = @"^\(?(\d{3})\)?[\s\-]?(\d{3})\-?(\d{4})$";
+            Match m = Regex.Match(input, pattern);
+
+            return String.Format("({0}) {1}-{2}", 
+                m.Groups[1], 
+                m.Groups[2], 
+                m.Groups[3]);
+        }
+
     }
 }
